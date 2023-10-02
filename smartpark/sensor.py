@@ -45,8 +45,9 @@ class CarDetector:
             self.root, text='Outgoing Car 🚘',  font=('Arial', 50), cursor='bottom_left_corner', command=self.outgoing_car)
         self.btn_outgoing_car.pack(padx=10, pady=5)
 
-        # Use Composition
         self.sensor = Sensor(config)
+
+        self.root.protocol("WM_DELETE_WINDOW", self.on_window_close)
 
         self.root.mainloop()
 
@@ -56,6 +57,10 @@ class CarDetector:
         message = (self.sensor.temperature, "Entry")
         self.sensor.on_detection(f"Entry,{self.sensor.temperature}")
         print("Car goes in")
+
+    def on_window_close(self):
+        self.sensor.on_detection(f"Quit,{self.sensor.temperature}")
+        self.root.destroy()
 
     def outgoing_car(self):
         # implement this method to publish the detection via MQTT
