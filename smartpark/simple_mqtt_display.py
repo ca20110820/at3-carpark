@@ -99,7 +99,8 @@ class CarParkDisplay(mqtt_device.MqttDevice):
         self.msg_str = None  # Message string to be continuously updated
         # self.client.loop_forever()
 
-        thread = threading.Thread(target=self.client.loop_forever)
+        thread = threading.Thread(target=self.client.loop_forever, daemon=True)
+        # thread.daemon = True
         thread.start()
 
         self.window = WindowedDisplay('Moondalup', CarParkDisplay.fields)
