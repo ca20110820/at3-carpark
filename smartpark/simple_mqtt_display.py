@@ -5,7 +5,6 @@ import random
 import threading
 import tkinter as tk
 from typing import Iterable
-from .mqtt_device import MqttDevice
 
 class Display(mqtt_device.MqttDevice):
     """Displays the number of cars and the temperature"""
@@ -88,28 +87,39 @@ class WindowedDisplay:
 
 # -----------------------------------------#
 
-class CarParkDisplay:
+class CarParkDisplay(mqtt_device.MqttDevice):
     """Provides a simple display of the car park status. This is a skeleton only. The class is designed to be customizable without requiring and understanding of tkinter or threading."""
     # determines what fields appear in the UI
     fields = ['Available bays', 'Temperature', 'At']
 
     def __init__(self, inp_config):
-        self._mqtt_device = MqttDevice(inp_config)
-        self.client = self._mqtt_device.client
+        super().__init__(inp_config)
         self.client.on_message = self.on_message
         self.client.subscribe('display')
+        self.msg_str = None  # Message string to be continuously updated
+        # self.client.loop_forever()
+
+        thread = threading.Thread(target=self.client.loop_forever)
+        thread.start()
 
         self.window = WindowedDisplay('Moondalup', CarParkDisplay.fields)
-        updater = threading.Thread(target=self.check_updates)
-        updater.daemon = True
-        updater.start()
-
-        self.display = Display(inp_config)
-
         self.window.show()
 
     def on_message(self, client, userdata, msg):
-        pass
+        data = msg.payload.decode()  #
+        self.msg_str = data.split(';')  # List[str] - ["<spaces>","<temperature>","<time>"]
+
+        field_values = dict(zip(CarParkDisplay.fields, [
+            f'{self.msg_str[0]}',
+            f'{self.msg_str[1]}℃',
+            f'{self.msg_str[2]}'
+        ]))
+
+        # Pretending to wait on updates from MQTT
+        # time.sleep(random.randint(1, 10))
+
+        # When you get an update, refresh the display.
+        self.window.update(field_values)
 
     def check_updates(self):
         # TODO: This is where you should manage the MQTT subscription
