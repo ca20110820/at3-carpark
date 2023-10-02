@@ -10,22 +10,21 @@ def run_script(script_name):
     # Use subprocess to run the script as a separate process
     subprocess.run([fr"{CURRENT_DIRECTORY}\.venv\Scripts\python.exe", fr"{CURRENT_DIRECTORY}\smartpark\{script_name}"])
 
-print(CURRENT_DIRECTORY)
 
 if __name__ == "__main__":
     # Create a thread for each script
-    thread1 = threading.Thread(target=run_script, args=("sensor.py",), daemon=False)
-    thread2 = threading.Thread(target=run_script, args=("carpark.py",), daemon=True)
-    thread3 = threading.Thread(target=run_script, args=("display.py",), daemon=False)
+    sensor_thread = threading.Thread(target=run_script, args=("sensor.py",), daemon=False)
+    carpark_thread = threading.Thread(target=run_script, args=("carpark.py",), daemon=True)  # Daemon Thread for carpark
+    display_thread = threading.Thread(target=run_script, args=("display.py",), daemon=False)
 
     # Start all threads
-    thread1.start()
-    thread2.start()
-    thread3.start()
+    sensor_thread.start()
+    carpark_thread.start()
+    display_thread.start()
 
     # Wait for all threads to finish
-    thread1.join()
-    thread2.join()
-    thread3.join()
+    # No need to close daemon thread
+    sensor_thread.join()
+    display_thread.join()
 
-    print("All scripts have finished.")
+    print("Closing Car Park Simulation Program")
