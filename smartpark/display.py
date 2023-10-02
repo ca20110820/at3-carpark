@@ -6,29 +6,6 @@ import threading
 import tkinter as tk
 from typing import Iterable
 
-class Display(mqtt_device.MqttDevice):
-    """Displays the number of cars and the temperature"""
-    def __init__(self, config):
-        super().__init__(config)
-        self.client.on_message = self.on_message
-        self.client.subscribe('display')
-        self.msg_str = None  # Message string to be continuously updated
-        self.client.loop_forever()
-
-    def display(self, *args):
-        print('*' * 20)
-        for val in args:
-            print(val)
-            # time.sleep(1)
-        print('*' * 20)
-
-    def on_message(self, client, userdata, msg):
-       data = msg.payload.decode()  #
-       self.msg_str = data.split(';')  # List[str] - ["<spaces>","<temperature>","<time>"]
-       self.display(*data.split(';'))
-       # TODO: Parse the message and extract free spaces,
-       #  temperature, time
-
 
 class WindowedDisplay:
     """Displays values for a given set of fields as a simple GUI window. Use .show() to display the window; use .update() to update the values displayed.
@@ -81,12 +58,6 @@ class WindowedDisplay:
                     text=updated_values[self.gui_elements[field].cget('text').rstrip(self.SEP)])
         self.window.update()
 
-# -----------------------------------------#
-# TODO: STUDENT IMPLEMENTATION STARTS HERE #
-# -----------------------------------------#
-
-# -----------------------------------------#
-
 class CarParkDisplay(mqtt_device.MqttDevice):
     """Provides a simple display of the car park status. This is a skeleton only. The class is designed to be customizable without requiring and understanding of tkinter or threading."""
     # determines what fields appear in the UI
@@ -122,28 +93,6 @@ class CarParkDisplay(mqtt_device.MqttDevice):
         # When you get an update, refresh the display.
         self.window.update(field_values)
 
-    def check_updates(self):
-        # TODO: This is where you should manage the MQTT subscription
-        while True:
-            # NOTE: Dictionary keys *must* be the same as the class fields
-            # field_values = dict(zip(CarParkDisplay.fields, [
-            #     f'{random.randint(0, 150):03d}',
-            #     f'{random.randint(0, 45):02d}℃',
-            #     time.strftime("%H:%M:%S")
-            # ]))
-
-            field_values = dict(zip(CarParkDisplay.fields, [
-                f'{self.display.msg_str[0]}',
-                f'{self.display.msg_str[1]}℃',
-                f'{self.display.msg_str[2]}'
-            ]))
-
-            # Pretending to wait on updates from MQTT
-            # time.sleep(random.randint(1, 10))
-
-            # When you get an update, refresh the display.
-            self.window.update(field_values)
-
 
 if __name__ == '__main__':
     config = {'name': 'display',
@@ -154,6 +103,5 @@ if __name__ == '__main__':
      'topic-qualifier': 'na'
      }
     # TODO: Read config from file
-    # display = Display(config)
 
     CarParkDisplay(config)
