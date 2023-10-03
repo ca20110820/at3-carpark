@@ -7,6 +7,7 @@ import tkinter as tk
 from typing import Iterable
 import mqtt_device
 
+from config_parser import parse_config
 
 class Sensor(mqtt_device.MqttDevice):
 
@@ -71,13 +72,13 @@ class CarDetector:
 
 
 if __name__ == '__main__':
-    config1 = {'name': 'sensor',
-              'location': 'moondalup',
-              'topic-root': "lot",
-              'topic-qualifier': "na",
-              'broker': 'localhost',
-              'port': 1883,
-              }
+    # config1 = {'name': 'sensor',
+    #           'location': 'moondalup',
+    #           'topic-root': "lot",
+    #           'topic-qualifier': "na",
+    #           'broker': 'localhost',
+    #           'port': 1883,
+    #           }
     # # TODO: Read previous config from file instead of embedding
     #
     # sensor1 = Sensor(config1)
@@ -85,5 +86,6 @@ if __name__ == '__main__':
     # sensor1.start_sensing()
     # sensor1.start_sensing()
 
-    CarDetector(config1)
+    # CarDetector(config1)
+    CarDetector(parse_config(r"..\config.toml")['sensor'])
 

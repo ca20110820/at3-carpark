@@ -33,12 +33,20 @@ Finally, you can use `yaml` if you prefer.
 import toml
 
 
-def parse_config(config_filepath=r"..\config.toml") -> dict:
+def parse_config(config_filepath) -> dict:
     """Parse the config file and return the values as a dictionary"""
     with open(config_filepath, "r") as file:
         config = toml.load(file)
 
-    return config['config']
+    config = config['config']
+
+    common_config = {k: v for k, v in config.items() if k in ["broker", "port", "topic-root"]}
+
+    sensor_config = common_config | config["sensor"]
+    carpark_config = common_config | config["carpark"]
+    display_config = common_config | config["display"]
+
+    return {"sensor": sensor_config, "carpark": carpark_config, "display": display_config}
 
 if __name__ == "__main__":
-    print(parse_config())
+    print(parse_config(r"..\config.toml")['carpark'])

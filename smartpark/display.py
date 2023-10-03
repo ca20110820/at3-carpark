@@ -6,6 +6,7 @@ import threading
 import tkinter as tk
 from typing import Iterable
 
+from config_parser import parse_config
 
 class WindowedDisplay:
     """Displays values for a given set of fields as a simple GUI window. Use .show() to display the window; use .update() to update the values displayed.
@@ -95,13 +96,15 @@ class CarParkDisplay(mqtt_device.MqttDevice):
 
 
 if __name__ == '__main__':
-    config = {'name': 'display',
-     'location': 'L306',
-     'topic-root': "lot",
-     'broker': 'localhost',
-     'port': 1883,
-     'topic-qualifier': 'na'
-     }
-    # TODO: Read config from file
+    # config = {'name': 'display',
+    #  'location': 'L306',
+    #  'topic-root': "lot",
+    #  'broker': 'localhost',
+    #  'port': 1883,
+    #  'topic-qualifier': 'na'
+    #  }
+    # # TODO: Read config from file
 
-    CarParkDisplay(config)
+    # CarParkDisplay(config)
+
+    CarParkDisplay(parse_config(r"..\config.toml")['display'])
