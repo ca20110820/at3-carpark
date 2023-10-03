@@ -4,6 +4,7 @@ setup(
     name="smartpark",
     version="0.1.0",
     packages=find_packages(),
+	package_data = {"smartpark":["config/*.toml"]},
     install_requires=[
         "paho-mqtt",
         "sense-hat",
