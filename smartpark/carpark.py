@@ -52,10 +52,18 @@ class CarPark(mqtt_device.MqttDevice):
 
     def on_car_entry(self):
         self.total_cars += 1
+
+        if self.total_cars >= self.total_spaces:
+            self.total_cars = self.total_spaces
+
         self._publish_event()
 
     def on_car_exit(self):
         self.total_cars -= 1
+
+        if self.total_cars < 0:
+            self.total_cars = 0
+
         self._publish_event()
 
     def on_message(self, client, userdata, msg: MQTTMessage):
