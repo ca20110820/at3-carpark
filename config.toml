@@ -1,0 +1,6 @@
+[config]
+location = "Moondalup City Square Parking"
+total_spaces = 10  # Fixed Number of Spaces/Parking Lots
+num_cars = 5  # Initial Number of Cars
+broker_host = "localhost"
+broker_port = 1883

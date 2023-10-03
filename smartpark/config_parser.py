@@ -30,10 +30,15 @@ Finally, you can use `yaml` if you prefer.
 
 
 """
+import toml
 
 
-
-def parse_config(config: dict) -> dict:
+def parse_config(config_filepath=r"..\config.toml") -> dict:
     """Parse the config file and return the values as a dictionary"""
-    # TODO: get the configuration from a parsed file
-    return {'location': 'TBD', 'total_spaces': 0, 'broker_host': 'TBD', 'broker_port': 0}
+    with open(config_filepath, "r") as file:
+        config = toml.load(file)
+
+    return config['config']
+
+if __name__ == "__main__":
+    print(parse_config())
