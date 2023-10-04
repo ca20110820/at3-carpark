@@ -47,7 +47,10 @@ class CarPark(mqtt_device.MqttDevice):
         )
 
         # msg_str = f"{readable_time};{self.available_spaces};{self.temperature}"  # "<time>;<spaces>;<temperature>"
-        msg_str = f"{self.available_spaces};{self.temperature};{readable_time}"  # "<spaces>;<temperature>;<time>"
+        if self.available_spaces == 0:
+            msg_str = f"Full;{self.temperature};{readable_time}"  # "<spaces>;<temperature>;<time>"
+        else:
+            msg_str = f"{self.available_spaces};{self.temperature};{readable_time}"  # "<spaces>;<temperature>;<time>"
 
         self.client.publish('display', msg_str)
 
