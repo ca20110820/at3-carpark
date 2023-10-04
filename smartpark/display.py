@@ -6,7 +6,7 @@ import threading
 import tkinter as tk
 from typing import Iterable
 
-from config_parser import parse_config, CONFIG_PATH
+from config_parser import DISPLAY_CONFIG
 
 class WindowedDisplay:
     """Displays values for a given set of fields as a simple GUI window. Use .show() to display the window; use .update() to update the values displayed.
@@ -107,4 +107,5 @@ if __name__ == '__main__':
 
     # CarParkDisplay(config)
 
-    CarParkDisplay(parse_config(CONFIG_PATH)['display'])
+    # CarParkDisplay(parse_config(CONFIG_PATH)['display'])
+    CarParkDisplay(DISPLAY_CONFIG)

@@ -4,7 +4,7 @@ import mqtt_device
 import paho.mqtt.client as paho
 from paho.mqtt.client import MQTTMessage
 
-from config_parser import parse_config, CONFIG_PATH
+from config_parser import CARPARK_CONFIG
 
 class CarPark(mqtt_device.MqttDevice):
     """Creates a carpark object to store the state of cars in the lot"""
@@ -96,4 +96,5 @@ if __name__ == '__main__':
     # car_park = CarPark(config)
 
     print("Carpark initialized")
-    car_park = CarPark(parse_config(CONFIG_PATH)['carpark'])
+    # car_park = CarPark(parse_config(CONFIG_PATH)['carpark'])
+    car_park = CarPark(CARPARK_CONFIG)

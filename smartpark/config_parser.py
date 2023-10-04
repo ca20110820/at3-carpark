@@ -33,6 +33,8 @@ Finally, you can use `yaml` if you prefer.
 import os
 import toml
 
+import pkg_resources
+
 import smartpark
 
 
@@ -51,12 +53,17 @@ def parse_config(config_filepath) -> dict:
 
     return {"sensor": sensor_config, "carpark": carpark_config, "display": display_config}
 
+
 def _get_config_path():
     current_dir = os.path.dirname(os.path.abspath(smartpark.__file__))
     config_file_path = os.path.join(current_dir, r'config\config.toml')
     return config_file_path
 
-CONFIG_PATH = _get_config_path()
+
+CONFIG_PATH = pkg_resources.resource_filename("smartpark", 'config/config.toml')
+SENSOR_CONFIG = parse_config(CONFIG_PATH)['sensor']
+CARPARK_CONFIG = parse_config(CONFIG_PATH)['carpark']
+DISPLAY_CONFIG = parse_config(CONFIG_PATH)['display']
 
 
 if __name__ == "__main__":

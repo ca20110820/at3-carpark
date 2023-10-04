@@ -7,7 +7,7 @@ import tkinter as tk
 from typing import Iterable
 import mqtt_device
 
-from config_parser import parse_config, CONFIG_PATH
+from config_parser import SENSOR_CONFIG
 
 class Sensor(mqtt_device.MqttDevice):
 
@@ -87,5 +87,5 @@ if __name__ == '__main__':
     # sensor1.start_sensing()
 
     # CarDetector(config1)
-    CarDetector(parse_config(CONFIG_PATH)['sensor'])
-
+    # CarDetector(parse_config(CONFIG_PATH)['sensor'])
+    CarDetector(SENSOR_CONFIG)
