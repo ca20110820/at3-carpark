@@ -10,13 +10,14 @@ from smartpark.config_parser import CARPARK_CONFIG
 class CarPark(mqtt_device.MqttDevice):
     """Creates a carpark object to store the state of cars in the lot"""
 
-    def __init__(self, config):
+    def __init__(self, config, test_mode=False):
         super().__init__(config)
         self.total_spaces = config['total-spaces']
         self.total_cars = config['total-cars']
         self.client.on_message = self.on_message
         self.client.subscribe('sensor')
-        self.client.loop_forever()
+        if not test_mode:
+            self.client.loop_forever()
         self._temperature = None
 
     @property
