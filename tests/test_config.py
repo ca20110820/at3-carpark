@@ -1,20 +1,32 @@
 import unittest
 
-import tomli  # you can use toml, json,yaml, or ryo for your config file
+import toml  # you can use toml, json,yaml, or ryo for your config file
 
-import smartpark.parse_config as pc
+from smartpark.config_parser import CONFIG_PATH, parse_config
 
 
 class TestConfigParsing(unittest.TestCase):
-    def test_parse_config_has_correct_location_and_spaces(self):
-        config_string = '''
-        [parking_lot]
-        location = "Moondalup City Square Parking"
-        total_spaces = 192
-        broker_host = "localhost"
-        broker_port = 1883
-        '''
-        config = tomli.loads(config_string)
-        parking_lot = pc.parse_config(config)
-        self.assertEqual(parking_lot['location'], "Moondalup City Square Parking")
-        self.assertEqual(parking_lot['total_spaces'], 192)
+    def test_parse_config(self):
+        configs = parse_config(CONFIG_PATH)
+        self.assertEqual(configs['sensor']['broker'], 'localhost')
+        self.assertEqual(configs['sensor']['port'], 1883)
+        self.assertEqual(configs['sensor']['topic-root'], 'lot')
+        self.assertEqual(configs['sensor']['name'], 'sensor')
+        self.assertEqual(configs['sensor']['location'], 'moondaloop')
+        self.assertEqual(configs['sensor']['topic-qualifier'], 'na')
+
+        self.assertEqual(configs['carpark']['broker'], 'localhost')
+        self.assertEqual(configs['carpark']['port'], 1883)
+        self.assertEqual(configs['carpark']['topic-root'], 'lot')
+        self.assertEqual(configs['carpark']['name'], 'raf-park')
+        self.assertEqual(configs['carpark']['location'], 'L306')
+        self.assertEqual(configs['carpark']['topic-qualifier'], 'car-park')
+        self.assertEqual(configs['carpark']['total-spaces'], 10)
+        self.assertEqual(configs['carpark']['total-cars'], 5)
+
+        self.assertEqual(configs['display']['broker'], 'localhost')
+        self.assertEqual(configs['display']['port'], 1883)
+        self.assertEqual(configs['display']['topic-root'], 'lot')
+        self.assertEqual(configs['display']['name'], 'display')
+        self.assertEqual(configs['display']['location'], 'L306')
+        self.assertEqual(configs['display']['topic-qualifier'], 'na')
