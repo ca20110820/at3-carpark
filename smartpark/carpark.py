@@ -1,10 +1,11 @@
 from datetime import datetime
 
-import mqtt_device
 import paho.mqtt.client as paho
 from paho.mqtt.client import MQTTMessage
 
-from config_parser import CARPARK_CONFIG
+from smartpark import mqtt_device
+from smartpark.config_parser import CARPARK_CONFIG
+
 
 class CarPark(mqtt_device.MqttDevice):
     """Creates a carpark object to store the state of cars in the lot"""

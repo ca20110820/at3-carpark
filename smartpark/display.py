@@ -1,12 +1,12 @@
-import mqtt_device
 import time
-
 import random
 import threading
 import tkinter as tk
 from typing import Iterable
 
-from config_parser import DISPLAY_CONFIG
+from smartpark import mqtt_device
+from smartpark.config_parser import DISPLAY_CONFIG
+
 
 class WindowedDisplay:
     """Displays values for a given set of fields as a simple GUI window. Use .show() to display the window; use .update() to update the values displayed.

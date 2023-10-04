@@ -5,9 +5,9 @@ import threading
 import time
 import tkinter as tk
 from typing import Iterable
-import mqtt_device
 
-from config_parser import SENSOR_CONFIG
+from smartpark import mqtt_device
+from smartpark.config_parser import SENSOR_CONFIG
 
 class Sensor(mqtt_device.MqttDevice):
 
