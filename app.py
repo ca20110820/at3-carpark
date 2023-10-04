@@ -1,13 +1,14 @@
 import concurrent.futures
 import subprocess
 import os
+import sys
+
+import smartpark
 
 
 def run_script(script_name):
-    cwd = os.getcwd()
-
     # Use subprocess to run the script as a separate process
-    subprocess.run([fr"{cwd}\.venv\Scripts\python.exe", fr"{cwd}\smartpark\{script_name}"])
+    subprocess.run([sys.executable, os.path.join(os.path.dirname(smartpark.__file__), script_name)])
 
 
 if __name__ == "__main__":
