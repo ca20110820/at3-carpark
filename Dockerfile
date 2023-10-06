@@ -6,11 +6,8 @@ COPY . /at3
 RUN python3 /at3/setup.py install
 
 # Install MQTT Mosquitto
-RUN apt-get update \
-    && apt-get install -y mosquitto mosquitto-clients \
-    && mosquitto -c /etc/mosquitto/mosquitto.conf
-
-# Run MQTT Mosquitto
+RUN apt-get update && apt-get install -y mosquitto mosquitto-clients
+RUN service mosquitto start
 EXPOSE 1883
 
-CMD ["python3", "/at3/smartpark"]
+CMD ["python3", "smartpark"]
