@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - "main"
+      - "develop"
 
 jobs:
   docker:
@@ -22,7 +23,7 @@ jobs:
         env:
           USERNAME:  ${{ secrets.DOCKERHUB_USERNAME }}
         run: |
-          ls -l 
+          ls -la
           docker build . -t $USERNAME/at3-with-gui:latest
           docker push $USERNAME/at3-with-gui -a
           
