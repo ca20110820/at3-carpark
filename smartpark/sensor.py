@@ -9,6 +9,7 @@ from typing import Iterable
 from smartpark import mqtt_device
 from smartpark.config_parser import SENSOR_CONFIG
 
+
 class Sensor(mqtt_device.MqttDevice):
 
     @property
@@ -31,6 +32,20 @@ class Sensor(mqtt_device.MqttDevice):
                 self.on_detection(f"entered, {self.temperature}")
             else:
                 self.on_detection(f"exited, {self.temperature}")
+
+    def start_random_sensing(self):
+        while True:
+            time_interval = random.random()  # Random Number between 0 & 1
+            time.sleep(time_interval)
+            rnd = random.choice(["Entry", "Exit"])
+            try:
+                if rnd == "Entry":
+                    self.on_detection(f"Entry,{self.temperature}")
+                else:
+                    self.on_detection(f"Exit,{self.temperature}")
+            except KeyboardInterrupt:
+                self.on_detection(f"Quit,{self.temperature}")
+
 
 class CarDetector:
     """Provides a couple of simple buttons that can be used to represent a sensor detecting a car. This is a skeleton only."""
@@ -88,4 +103,6 @@ if __name__ == '__main__':
 
     # CarDetector(config1)
     # CarDetector(parse_config(CONFIG_PATH)['sensor'])
-    CarDetector(SENSOR_CONFIG)
+    # CarDetector(SENSOR_CONFIG)
+    sensor = Sensor(SENSOR_CONFIG)
+    sensor.start_random_sensing()
