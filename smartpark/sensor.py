@@ -50,7 +50,7 @@ class Sensor(mqtt_device.MqttDevice):
 class CarDetector:
     """Provides a couple of simple buttons that can be used to represent a sensor detecting a car. This is a skeleton only."""
 
-    def __init__(self, config):
+    def __init__(self, config, use_random_sensing=False):
         self.root = tk.Tk()
         self.root.title("Car Detector ULTRA")
 
@@ -64,6 +64,10 @@ class CarDetector:
         self.sensor = Sensor(config)
 
         self.root.protocol("WM_DELETE_WINDOW", self.on_window_close)
+
+        if use_random_sensing:
+            thread = threading.Thread(target=self.sensor.start_random_sensing, daemon=True)
+            thread.start()
 
         self.root.mainloop()
 
@@ -103,6 +107,6 @@ if __name__ == '__main__':
 
     # CarDetector(config1)
     # CarDetector(parse_config(CONFIG_PATH)['sensor'])
-    CarDetector(SENSOR_CONFIG)
+    CarDetector(SENSOR_CONFIG, use_random_sensing=True)
     # sensor = Sensor(SENSOR_CONFIG)
     # sensor.start_random_sensing()
