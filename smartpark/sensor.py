@@ -103,6 +103,6 @@ if __name__ == '__main__':
 
     # CarDetector(config1)
     # CarDetector(parse_config(CONFIG_PATH)['sensor'])
-    # CarDetector(SENSOR_CONFIG)
-    sensor = Sensor(SENSOR_CONFIG)
-    sensor.start_random_sensing()
+    CarDetector(SENSOR_CONFIG)
+    # sensor = Sensor(SENSOR_CONFIG)
+    # sensor.start_random_sensing()
