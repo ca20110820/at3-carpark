@@ -1,10 +1,7 @@
 import threading
-import time
 from datetime import datetime
 from bokeh.plotting import figure, curdoc
 from bokeh.models import ColumnDataSource
-from bokeh.io import show, push_notebook
-from bokeh.driving import linear
 
 from smartpark.mqtt_device import MqttDevice
 
@@ -30,10 +27,11 @@ class TimeSeriesDisplay(MqttDevice):
 
         data[1] = float(data[1])
 
-        data[2] = datetime.now()#.strftime("%Y-%m-%d %H:%M:%S")
+        data[2] = datetime.now()
 
         print(self.data)
         self.data = [data[0], data[1], data[2]]
+
 
 config = {"name": "time-series-display",
           "location": "moondaloop",
@@ -44,16 +42,23 @@ config = {"name": "time-series-display",
           }
 ts_display = TimeSeriesDisplay(config)
 
-source = ColumnDataSource(data={"x": [], "y": []})
+source = ColumnDataSource(data={"Time": [], "Available Spaces": [], "Temperature": []})
 
-plot = figure(height=300, width=800, x_axis_type="datetime", title="Available Spaces")
-plot.line(x="x", y="y", source=source)
+plot_spaces = figure(height=300, width=800, x_axis_type="datetime", title="Available Spaces")
+plot_spaces.line(x="Time", y="Available Spaces", source=source)
 
+plot_temperature = figure(height=300, width=800, x_axis_type="datetime", title="Temperature")
+plot_temperature.line(x="Time", y="Temperature", source=source)
 
 
 def update():
     if ts_display.data is not None:
-        source.stream({"x": [ts_display.data[2]], "y": [ts_display.data[0]]}, rollover=5000)
+        source.stream({"Time": [ts_display.data[2]],
+                       "Available Spaces": [ts_display.data[0]],
+                       "Temperature": [ts_display.data[1]]},
+                      rollover=5000)
 
-curdoc().add_root(plot)
+
+curdoc().add_root(plot_spaces)
+curdoc().add_root(plot_temperature)
 curdoc().add_periodic_callback(update, 50)
