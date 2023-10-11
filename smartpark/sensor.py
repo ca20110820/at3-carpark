@@ -43,8 +43,11 @@ class Sensor(mqtt_device.MqttDevice):
                 else:
                     self.on_detection(f"Exit,{self.temperature}")
             except KeyboardInterrupt:
+                self.stop_sensing()
                 self.on_detection(f"Quit,{self.temperature}")
 
+    def stop_sensing(self):
+        self.client.publish('quit', "True")
 
 class CarDetector:
     """Provides a couple of simple buttons that can be used to represent a sensor detecting a car.
@@ -81,6 +84,7 @@ class CarDetector:
 
     def on_window_close(self):
         self.sensor.on_detection(f"Quit,{self.sensor.temperature}")
+        self.sensor.stop_sensing()
         self.root.destroy()
 
     def outgoing_car(self):

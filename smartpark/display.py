@@ -1,9 +1,13 @@
+import os
+import sys
 import time
 import random
 import threading
+import subprocess
 import tkinter as tk
 from typing import Iterable
 
+import smartpark
 from smartpark import mqtt_device
 from smartpark.config_parser import DISPLAY_CONFIG
 
@@ -64,7 +68,7 @@ class CarParkDisplay(mqtt_device.MqttDevice):
     # determines what fields appear in the UI
     fields = ['Available bays', 'Temperature', 'At']
 
-    def __init__(self, inp_config):
+    def __init__(self, inp_config, show_timeseries_display=False):
         super().__init__(inp_config)
         self.client.on_message = self.on_message
         self.client.subscribe('display')
@@ -75,8 +79,15 @@ class CarParkDisplay(mqtt_device.MqttDevice):
         # thread.daemon = True
         thread.start()
 
+        if show_timeseries_display:
+            thread_timeseries = threading.Thread(target=self._run_timeseries_display, daemon=True)
+            thread_timeseries.start()
+
         self.window = WindowedDisplay('Moondalup', CarParkDisplay.fields)
         self.window.show()
+
+    def _run_timeseries_display(self):
+        subprocess.run([os.path.join(os.path.dirname(sys.executable), 'bokeh.exe'), "serve", "--show", f"{os.path.join(os.path.dirname(smartpark.__file__), 'time_series_display.py')}"])
 
     def on_message(self, client, userdata, msg):
         data = msg.payload.decode()  #
@@ -108,4 +119,4 @@ if __name__ == '__main__':
     # CarParkDisplay(config)
 
     # CarParkDisplay(parse_config(CONFIG_PATH)['display'])
-    CarParkDisplay(DISPLAY_CONFIG)
+    CarParkDisplay(DISPLAY_CONFIG, show_timeseries_display=True)
