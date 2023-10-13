@@ -7,8 +7,7 @@ setup(
     package_data={"smartpark": ["config/*.toml"]},
     install_requires=[
         "paho-mqtt",
-        "toml",
-        "tkinter"
+        "toml"
     ],
     entry_points={
         "console_scripts": [
