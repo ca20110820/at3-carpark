@@ -42,13 +42,7 @@ class CarPark(mqtt_device.MqttDevice):
                 + f"TEMPC: {self.temperature}"
             )
         )
-        message = (
-            f"TIME: {readable_time}, "
-            + f"SPACES: {self.available_spaces}, "
-            + f"TEMPC: {self.temperature}"
-        )
 
-        # msg_str = f"{readable_time};{self.available_spaces};{self.temperature}"  # "<time>;<spaces>;<temperature>"
         if self.available_spaces == 0:
             msg_str = f"Full;{self.temperature};{readable_time}"  # "<spaces>;<temperature>;<time>"
         else:

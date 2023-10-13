@@ -4,7 +4,6 @@ import random
 import threading
 import time
 import tkinter as tk
-from typing import Iterable
 
 from smartpark import mqtt_device
 from smartpark.config_parser import SENSOR_CONFIG
@@ -48,7 +47,9 @@ class Sensor(mqtt_device.MqttDevice):
 
 
 class CarDetector:
-    """Provides a couple of simple buttons that can be used to represent a sensor detecting a car. This is a skeleton only."""
+    """Provides a couple of simple buttons that can be used to represent a sensor detecting a car.
+    This is a skeleton only.
+    """
 
     def __init__(self, config, use_random_sensing=False):
         self.root = tk.Tk()
@@ -58,7 +59,8 @@ class CarDetector:
             self.root, text='🚘 Incoming Car', font=('Arial', 50), cursor='right_side', command=self.incoming_car)
         self.btn_incoming_car.pack(padx=10, pady=5)
         self.btn_outgoing_car = tk.Button(
-            self.root, text='Outgoing Car 🚘',  font=('Arial', 50), cursor='bottom_left_corner', command=self.outgoing_car)
+            self.root, text='Outgoing Car 🚘', font=('Arial', 50), cursor='bottom_left_corner',
+            command=self.outgoing_car)
         self.btn_outgoing_car.pack(padx=10, pady=5)
 
         self.sensor = Sensor(config)
@@ -74,7 +76,6 @@ class CarDetector:
     def incoming_car(self):
         # implement this method to publish the detection via MQTT
         # TODO: Send message to CarPark subscriber
-        message = (self.sensor.temperature, "Entry")
         self.sensor.on_detection(f"Entry,{self.sensor.temperature}")
         print("Car goes in")
 
@@ -83,9 +84,7 @@ class CarDetector:
         self.root.destroy()
 
     def outgoing_car(self):
-        # implement this method to publish the detection via MQTT
         # TODO: Send message to CarPark subscriber
-        message = (self.sensor.temperature, "Exit")
         self.sensor.on_detection(f"Exit,{self.sensor.temperature}")
         print("Car goes out")
 
