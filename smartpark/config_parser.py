@@ -26,16 +26,11 @@ python -m pip install tomli
 see [realpython.com](https://realpython.com/python-toml/) for more info.
 
 Finally, you can use `yaml` if you prefer.
-
-
-
 """
-import os
+
 import toml
 
 import pkg_resources
-
-import smartpark
 
 
 def parse_config(config_filepath) -> dict:
@@ -52,12 +47,6 @@ def parse_config(config_filepath) -> dict:
     display_config = common_config | config["display"]
 
     return {"sensor": sensor_config, "carpark": carpark_config, "display": display_config}
-
-
-def _get_config_path():
-    current_dir = os.path.dirname(os.path.abspath(smartpark.__file__))
-    config_file_path = os.path.join(current_dir, r'config\config.toml')
-    return config_file_path
 
 
 CONFIG_PATH = pkg_resources.resource_filename("smartpark", 'config/config.toml')

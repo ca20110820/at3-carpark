@@ -1,6 +1,5 @@
 from datetime import datetime
 
-import paho.mqtt.client as paho
 from paho.mqtt.client import MQTTMessage
 
 from smartpark import mqtt_device
@@ -81,19 +80,4 @@ class CarPark(mqtt_device.MqttDevice):
 
 
 if __name__ == '__main__':
-    # config = {'name': "raf-park",
-    #           'total-spaces': 130,
-    #           'total-cars': 0,
-    #           'location': 'L306',
-    #           'topic-root': "lot",
-    #           'broker': 'localhost',
-    #           'port': 1883,
-    #           'topic-qualifier': 'entry',
-    #           'is_stuff': False
-    #           }
-    # # TODO: Read config from file
-    # car_park = CarPark(config)
-
-    print("Carpark initialized")
-    # car_park = CarPark(parse_config(CONFIG_PATH)['carpark'])
     car_park = CarPark(CARPARK_CONFIG)

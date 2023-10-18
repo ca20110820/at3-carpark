@@ -6,7 +6,7 @@ class MqttDevice:
         self.name = config['name']
         self.location = config['location']
 
-        # Define topic components:
+        # Define topic components
         self.topic_root = config['topic-root']
         self.topic_qualifier = config['topic-qualifier']
         self.topic = self._create_topic_string()
@@ -14,8 +14,6 @@ class MqttDevice:
         # Configure broker
         self.broker = config['broker']
         self.port = config['port']
-
-        # initialise a paho client and bind it to the object (has-a)
 
         self.client = paho.Client()
         self.client.connect(self.broker,

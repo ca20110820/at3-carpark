@@ -61,26 +61,23 @@ class WindowedDisplay:
 
 class CarParkDisplay(mqtt_device.MqttDevice):
     """Provides a simple display of the car park status. This is a skeleton only. The class is designed to be customizable without requiring and understanding of tkinter or threading."""
-    # determines what fields appear in the UI
-    fields = ['Available bays', 'Temperature', 'At']
+    fields = ['Available bays', 'Temperature', 'At']  # determines what fields appear in the UI
 
     def __init__(self, inp_config):
         super().__init__(inp_config)
         self.client.on_message = self.on_message
         self.client.subscribe('display')
         self.msg_str = None  # Message string to be continuously updated
-        # self.client.loop_forever()
 
         thread = threading.Thread(target=self.client.loop_forever, daemon=True)
-        # thread.daemon = True
         thread.start()
 
         self.window = WindowedDisplay('Moondalup', CarParkDisplay.fields)
         self.window.show()
 
     def on_message(self, client, userdata, msg):
-        data = msg.payload.decode()  #
-        self.msg_str = data.split(';')  # List[str] - ["<spaces>","<temperature>","<time>"]
+        data = msg.payload.decode()
+        self.msg_str = data.split(';')  # List[str] := ["<spaces>", "<temperature>", "<time>"]
 
         field_values = dict(zip(CarParkDisplay.fields, [
             f'{self.msg_str[0]}',
@@ -88,24 +85,9 @@ class CarParkDisplay(mqtt_device.MqttDevice):
             f'{self.msg_str[2]}'
         ]))
 
-        # Pretending to wait on updates from MQTT
-        # time.sleep(random.randint(1, 10))
-
         # When you get an update, refresh the display.
         self.window.update(field_values)
 
 
 if __name__ == '__main__':
-    # config = {'name': 'display',
-    #  'location': 'L306',
-    #  'topic-root': "lot",
-    #  'broker': 'localhost',
-    #  'port': 1883,
-    #  'topic-qualifier': 'na'
-    #  }
-    # # TODO: Read config from file
-
-    # CarParkDisplay(config)
-
-    # CarParkDisplay(parse_config(CONFIG_PATH)['display'])
     CarParkDisplay(DISPLAY_CONFIG)

@@ -33,6 +33,7 @@ class Sensor(mqtt_device.MqttDevice):
                 self.on_detection(f"exited, {self.temperature}")
 
     def start_random_sensing(self):
+        """Simulate Sensors without Human Control"""
         while True:
             time_interval = random.random()  # Random Number between 0 & 1
             time.sleep(time_interval)
@@ -74,7 +75,6 @@ class CarDetector:
         self.root.mainloop()
 
     def incoming_car(self):
-        # implement this method to publish the detection via MQTT
         # TODO: Send message to CarPark subscriber
         self.sensor.on_detection(f"Entry,{self.sensor.temperature}")
         print("Car goes in")
@@ -90,22 +90,4 @@ class CarDetector:
 
 
 if __name__ == '__main__':
-    # config1 = {'name': 'sensor',
-    #           'location': 'moondalup',
-    #           'topic-root': "lot",
-    #           'topic-qualifier': "na",
-    #           'broker': 'localhost',
-    #           'port': 1883,
-    #           }
-    # # TODO: Read previous config from file instead of embedding
-    #
-    # sensor1 = Sensor(config1)
-    # print("Sensor initialized")
-    # sensor1.start_sensing()
-    # sensor1.start_sensing()
-
-    # CarDetector(config1)
-    # CarDetector(parse_config(CONFIG_PATH)['sensor'])
-    CarDetector(SENSOR_CONFIG, use_random_sensing=True)
-    # sensor = Sensor(SENSOR_CONFIG)
-    # sensor.start_random_sensing()
+    CarDetector(SENSOR_CONFIG, use_random_sensing=False)
